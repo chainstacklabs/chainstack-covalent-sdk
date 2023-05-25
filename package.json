@@ -1,0 +1,21 @@
+{
+  "name": "chainstack-covalent-sdk",
+  "version": "1.0.0",
+  "description": "An SDK designed to streamline the process of developing using the inegration of Chainstack with Covalent APIs, enhancing the ease of use and efficiency.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chainstack",
+    "covalent",
+    "api",
+    "blockchain"
+  ],
+  "author": "DZ",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "dotenv": "^16.0.3"
+  }
+}
