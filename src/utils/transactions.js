@@ -1,3 +1,6 @@
+const axios = require('axios');
+const { COVALENT_BASE_URL } = require('../config/config');
+
 module.exports = function(ChainstackApi) {
   ChainstackApi.prototype.fetchRecentTransactions = async function({ chainName, walletAddress, currency, noLogs }) {
     try {
