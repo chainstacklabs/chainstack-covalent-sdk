@@ -77,11 +77,13 @@ class ChainstackApi {
     }
   }
 
-  async fetchTokenTransfers({ chainName, walletAddress }) {
+  async fetchTokenTransfers({ chainName, walletAddress, currency, contractAddress, startingBlock, endingBlock }) {
     try {
       const validatedToken = await this.validateToken();
 
       const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/transfers_v2/`);
+      const params = { 'quote-currency': currency, 'contract-address': contractAddress, 'starting-block': startingBlock, 'ending-block': endingBlock };
+      url.search = new URLSearchParams(params).toString();
 
       const response = await axios.get(url, {
         headers: {
@@ -96,12 +98,13 @@ class ChainstackApi {
     }
   }
 
-  async fetchLogEvents({ chainName, walletAddress, noLogs }) {
+
+  async fetchLogEvents({ chainName, contractAddress, startingBlock, endingBlock }) {
     try {
       const validatedToken = await this.validateToken();
 
-      const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/events_v2/`);
-      const params = { 'no-logs': noLogs };
+      const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${contractAddress}/events_v2/`);
+      const params = { 'starting-block': startingBlock, 'ending-block': endingBlock };
       url.search = new URLSearchParams(params).toString();
 
       const response = await axios.get(url, {
@@ -112,10 +115,11 @@ class ChainstackApi {
 
       return response.data;
     } catch (error) {
-      console.error('Error fetching log events for wallet:', walletAddress, 'on chain:', chainName, 'Error:', error);
-      throw new Error(`Failed to fetch log events for wallet ${walletAddress} on chain ${chainName}: ${error.message}`);
+      console.error('Error fetching log events for contract:', contractAddress, 'on chain:', chainName, 'Error:', error);
+      throw new Error(`Failed to fetch log events for contract ${contractAddress} on chain ${chainName}: ${error.message}`);
     }
   }
+
 
   async fetchNfts({ chainName, walletAddress }) {
     try {
@@ -136,12 +140,12 @@ class ChainstackApi {
     }
   }
 
-  async fetchHistoricalPortfolioValue({ chainName, walletAddress, currency }) {
+   async fetchHistoricalPortfolioValue({ chainName, walletAddress, currency, days }) {
     try {
       const validatedToken = await this.validateToken();
 
       const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/portfolio_v2/`);
-      const params = { 'quote-currency': currency };
+      const params = { 'quote-currency': currency, 'days': days };
       url.search = new URLSearchParams(params).toString();
 
       const response = await axios.get(url, {
@@ -158,11 +162,13 @@ class ChainstackApi {
   }
 
 
-  async fetchTokenBalances({ chainName, walletAddress }) {
+   async fetchTokenBalances({ chainName, walletAddress, currency, nft, noNftFetch, noSpam }) {
     try {
       const validatedToken = await this.validateToken();
 
       const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/balances_v2/`);
+      const params = { 'quote-currency': currency, nft, 'no-nft-fetch': noNftFetch, 'no-spam': noSpam };
+      url.search = new URLSearchParams(params).toString();
 
       const response = await axios.get(url, {
         headers: {
@@ -176,6 +182,7 @@ class ChainstackApi {
       throw new Error(`Failed to fetch token balances for wallet ${walletAddress} on chain ${chainName}: ${error.message}`);
     }
   }
+
 
 
 
