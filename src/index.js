@@ -30,11 +30,11 @@ class ChainstackApi {
   }
 }
 
-require('./operations/balances')(ChainstackApi);
-require('./operations/nft')(ChainstackApi);
-require('./operations/transactions')(ChainstackApi);
-require('./operations/security')(ChainstackApi);
-require('./operations/base')(ChainstackApi);
+require('./utils/balances')(ChainstackApi);
+require('./utils/nft')(ChainstackApi);
+require('./utils/transactions')(ChainstackApi);
+require('./utils/security')(ChainstackApi);
+require('./utils/base')(ChainstackApi);
 
 module.exports = {
   ChainstackApi
