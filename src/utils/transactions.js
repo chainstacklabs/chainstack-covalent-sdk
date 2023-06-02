@@ -2,7 +2,7 @@ const axios = require('axios');
 const { COVALENT_BASE_URL } = require('../config/config');
 
 module.exports = function(ChainstackApi) {
-  ChainstackApi.prototype.fetchRecentTransactions = async function({ chainName, walletAddress, currency, noLogs }) {
+  ChainstackApi.prototype.fetchTransactions = async function({ chainName, walletAddress, currency, noLogs }) {
     try {
       const validatedToken = await this.validateToken();
 
@@ -27,7 +27,7 @@ module.exports = function(ChainstackApi) {
     try {
       const validatedToken = await this.validateToken();
 
-      const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/transactions_v2/`);
+      const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/transactions_v3/`);
 
       const response = await axios.get(url, {
         headers: {
