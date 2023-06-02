@@ -6,7 +6,7 @@ module.exports = function(ChainstackApi) {
     try {
       const validatedToken = await this.validateToken();
 
-      const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/nft_balances/`);
+      const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/balances_nft/`);
 
       const response = await axios.get(url, {
         headers: {
