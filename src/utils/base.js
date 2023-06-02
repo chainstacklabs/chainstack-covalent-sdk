@@ -6,7 +6,7 @@ module.exports = function(ChainstackApi) {
     try {
       const validatedToken = await this.validateToken();
 
-      const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${contractAddress}/events_v2/`);
+      const url = new URL(`${COVALENT_BASE_URL}/${chainName}/events/address/${contractAddress}/`);
       const params = { 'starting-block': startingBlock, 'ending-block': endingBlock };
       url.search = new URLSearchParams(params).toString();
 
