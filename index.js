@@ -1,45 +1,71 @@
-const {ChainstackApi} = require('./src/index')
-require('dotenv').config();
+const { ChainstackApi } = require('./src/index');
 
 const CHAINSTACK_API_KEY = process.env.CHAINSTACK_API_KEY
+const chainstack = new ChainstackApi(CHAINSTACK_API_KEY);
 
-/*
- * Usage example: This script demonstrates how to use the ChainstackApi class to fetch transactions from a specific address.
- * Two calls to the fetchTransactions method are made in succession. The execution time for each call is measured and logged.
- * The first call fetches a new JWT token, while the second call uses the token cached from the first call.
- * This demonstrates the efficiency gained from caching the JWT token, as the second call does not need to spend time fetching a new token.
- * Uncomment the console.log(transactionsData) line to see the API response.
- */
+const commonConfig = {
+  chainName: 'eth-mainnet',
+  walletAddress: '0x45794810982d2024901a0972ee101ACfBc018E0B',
+};
+
+const fetchTokenBalancesConfig = {
+  ...commonConfig,
+  currency: 'USD',
+  nft: true,
+  noNftFetch: false,
+  noSpam: true,
+};
+
+const fetchTransactionsConfig = {
+  ...commonConfig,
+  currency: 'USD',
+  noLogs: true,
+};
+
+const getAllTransactionsInBlockConfig = {
+  ...commonConfig,
+  blockHeight: 100,
+  quoteCurrency: 'USD',
+  noLogs: true,
+};
+
+const getBulkTimeBucketTransactionsConfig = {
+  ...commonConfig,
+  timeBucket: 100,
+  quoteCurrency: 'USD',
+  noLogs: true,
+};
+
+const functionsConfigMap = {
+  fetchTokenBalances: fetchTokenBalancesConfig,
+  fetchNfts: commonConfig,
+  getTokenApprovalsForAddress: commonConfig,
+  fetchTransactions: fetchTransactionsConfig,
+  getTransactionSummaryForAddress: commonConfig,
+  getAllTransactionsInBlock: getAllTransactionsInBlockConfig,
+  getBulkTimeBucketTransactionsForAddress: getBulkTimeBucketTransactionsConfig,
+};
 
 async function main() {
+  async function executeChainstackFunction(functionName, config) {
+    console.time(`${functionName} execution time`);
+  
     try {
-      // Create a new ChainstackApi object using a Chainstack API key
-      const chainstack = new ChainstackApi(CHAINSTACK_API_KEY);
-        
-      // The different endpoint take a config object as a parameter
-      const configObject = {
-        chainName: 'eth-mainnet',
-        walletAddress: 'jaredfromsubway.eth',
-        currency: 'USD',
-        noLogs: true
-      }
-  
-      console.time('fisrtCall');
-  
-      const { data: transactionsData } = await chainstack.fetchTransactions(configObject);
-  
-      console.timeEnd('fisrtCall');
-      
-      console.time('secondCall');
-  
-      const { data: secondTransactionsData } = await chainstack.fetchTransactions(configObject);
-  
-      console.timeEnd('secondCall');
-      //console.log(transactionsData);
+      const data = await chainstack[functionName](config);
+      console.log(`Done with ${functionName}`);
+      // console.log(`${functionName} data:`, JSON.stringify(data, null, 2));
     } catch (error) {
-      console.error('Error:', error);
+      console.error(`Failed to execute ${functionName}:`, error);
+    } finally {
+      console.timeEnd(`${functionName} execution time`);
     }
   }
   
-  
-  main();
+  // Execute all functions sequentially
+  for (const [functionName, config] of Object.entries(functionsConfigMap)) {
+    await executeChainstackFunction(functionName, config);
+  }
+}
+
+
+main()
