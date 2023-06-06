@@ -27,17 +27,23 @@ module.exports = function(ChainstackApi) {
     try {
       const validatedToken = await this.validateToken();
 
-      const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/transactions_v3/`);
+      let url = `${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/transactions_v3/page/0/`;
 
-      const response = await axios.get(url, {
-        headers: {
-          'Authorization': `Bearer ${validatedToken}`
-        }
-      });
+      let contractDeploymentTransactions = [];
 
-      const transactions = response.data.data.items;
+      while (url) {
+        const response = await axios.get(url, {
+          headers: {
+            'Authorization': `Bearer ${validatedToken}`
+          }
+        });
 
-      const contractDeploymentTransactions = transactions.filter(tx => tx.to_address === null);
+        const transactions = response.data.data.items;
+        const filteredTransactions = transactions.filter(tx => tx.to_address === null);
+        contractDeploymentTransactions = contractDeploymentTransactions.concat(filteredTransactions);
+
+        url = response.data.data.links.next;
+      }
 
       return contractDeploymentTransactions;
 
@@ -45,7 +51,7 @@ module.exports = function(ChainstackApi) {
       console.error('Error fetching contract deployment transactions for wallet:', walletAddress, 'on chain:', chainName, 'Error:', error);
       throw new Error(`Failed to fetch contract deployment transactions for wallet ${walletAddress} on chain ${chainName}: ${error.message}`);
     }
-  }
+}
 
 ChainstackApi.prototype.getTransaction = async function({ chainName, txHash, quoteCurrency, noLogs, withDex, withNftSales, withLending }) {
   try {
