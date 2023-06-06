@@ -2,7 +2,7 @@ const axios = require('axios');
 const { COVALENT_BASE_URL } = require('../config/config');
 
 module.exports = function(ChainstackApi) {
-  ChainstackApi.prototype.fetchTransactions = async function({ chainName, walletAddress, currency, noLogs }) {
+  ChainstackApi.prototype.fetchRecentTransactions = async function({ chainName, walletAddress, currency, noLogs }) {
     try {
       const validatedToken = await this.validateToken();
 
@@ -19,7 +19,7 @@ module.exports = function(ChainstackApi) {
       return response.data;
     } catch (error) {
       console.error('Error fetching transactions for wallet:', walletAddress, 'on chain:', chainName, 'Error:', error);
-      throw new Error(`Failed to fetch transactions for wallet ${walletAddress} on chain ${chainName}: ${error.message}`);
+      throw new Error(`Failed to fetch recent transactions for wallet ${walletAddress} on chain ${chainName}: ${error.message}`);
     }
   }
 
