@@ -40,7 +40,7 @@ const functionsConfigMap = {
   fetchTokenBalances: fetchTokenBalancesConfig,
   fetchNfts: commonConfig,
   getTokenApprovalsForAddress: commonConfig,
-  fetchTransactions: fetchTransactionsConfig,
+  fetchRecentTransactions: fetchTransactionsConfig,
   getTransactionSummaryForAddress: commonConfig,
   getAllTransactionsInBlock: getAllTransactionsInBlockConfig,
   getBulkTimeBucketTransactionsForAddress: getBulkTimeBucketTransactionsConfig,
