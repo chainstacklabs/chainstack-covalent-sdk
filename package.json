@@ -1,8 +1,8 @@
 {
   "name": "chainstack-covalent-sdk",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "An SDK designed to streamline the process of developing using the inegration of Chainstack with Covalent APIs, enhancing the ease of use and efficiency.",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
