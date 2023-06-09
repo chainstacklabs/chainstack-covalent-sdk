@@ -36,6 +36,4 @@ require('./utils/transactions')(ChainstackApi);
 require('./utils/security')(ChainstackApi);
 require('./utils/base')(ChainstackApi);
 
-module.exports = {
-  ChainstackApi
-}
+module.exports.ChainstackApi = ChainstackApi;
