@@ -2,7 +2,7 @@ const axios = require('axios');
 const { COVALENT_BASE_URL } = require('../config/config');
 
 module.exports = function(ChainstackApi) {
-  ChainstackApi.prototype.fetchTokenBalances = async function({ chainName, walletAddress, currency, nft, noNftFetch, noSpam }) {
+  ChainstackApi.prototype.fetchTokenBalances = async function({ chainName, walletAddress, currency = "USD", nft = true, noNftFetch = false, noSpam = false }) {
     try {
       const validatedToken = await this.validateToken();
 
@@ -23,7 +23,7 @@ module.exports = function(ChainstackApi) {
     }
   }
 
-  ChainstackApi.prototype.fetchHistoricalPortfolioValue = async function({ chainName, walletAddress, currency, days }) {
+  ChainstackApi.prototype.fetchHistoricalPortfolioValue = async function({ chainName, walletAddress, currency = "USD", days }) {
     try {
       const validatedToken = await this.validateToken();
 
@@ -44,7 +44,7 @@ module.exports = function(ChainstackApi) {
     }
   }
 
-ChainstackApi.prototype.fetchERC20TokenTransfers = async function({ chainName, walletAddress, currency, contractAddress, startingBlock, endingBlock }) {
+ChainstackApi.prototype.fetchERC20TokenTransfers = async function({ chainName, walletAddress, currency = "USD", contractAddress, startingBlock, endingBlock }) {
   try {
     const validatedToken = await this.validateToken();
 
