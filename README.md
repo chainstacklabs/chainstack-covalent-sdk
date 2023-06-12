@@ -23,7 +23,7 @@
 
 # Chainstack Covalent API JavaScript SDK
 
- A JavaScript SDK designed to streamline the process of developing using the inegration of Chainstack with Covalent APIs, enhancing the ease of use and efficiency.
+ A JavaScript SDK designed to streamline the process of developing using the integration of Chainstack with Covalent APIs, enhancing the ease of use and efficiency.
 
 ## Quickstart
 
