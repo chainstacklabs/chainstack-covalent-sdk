@@ -2,7 +2,7 @@ const axios = require('axios');
 const { COVALENT_BASE_URL } = require('../config/config');
 
 module.exports = function(ChainstackApi) {
-  ChainstackApi.prototype.fetchRecentTransactions = async function({ chainName, walletAddress, currency, noLogs }) {
+  ChainstackApi.prototype.fetchRecentTransactions = async function({ chainName, walletAddress, currency, noLogs=false }) {
     try {
       const validatedToken = await this.validateToken();
 
@@ -53,7 +53,7 @@ module.exports = function(ChainstackApi) {
     }
 }
 
-ChainstackApi.prototype.getTransaction = async function({ chainName, txHash, quoteCurrency, noLogs, withDex, withNftSales, withLending }) {
+ChainstackApi.prototype.getTransaction = async function({ chainName, txHash, quoteCurrency, noLogs=false, withDex=true, withNftSales=true, withLending=true }) {
   try {
     const validatedToken = await this.validateToken();
 
@@ -99,7 +99,7 @@ ChainstackApi.prototype.getTransactionSummaryForAddress = async function({ chain
   }
 }
 
-ChainstackApi.prototype.getAllTransactionsInBlock = async function({ chainName, blockHeight, quoteCurrency, noLogs }) {
+ChainstackApi.prototype.getAllTransactionsInBlock = async function({ chainName, blockHeight, quoteCurrency, noLogs=false }) {
   try {
     const validatedToken = await this.validateToken();
 
@@ -123,7 +123,7 @@ ChainstackApi.prototype.getAllTransactionsInBlock = async function({ chainName, 
   }
 }
 
-ChainstackApi.prototype.getBulkTimeBucketTransactionsForAddress = async function({ chainName, walletAddress, timeBucket, quoteCurrency, noLogs }) {
+ChainstackApi.prototype.getBulkTimeBucketTransactionsForAddress = async function({ chainName, walletAddress, timeBucket, quoteCurrency, noLogs=false }) {
   try {
     const validatedToken = await this.validateToken();
 
