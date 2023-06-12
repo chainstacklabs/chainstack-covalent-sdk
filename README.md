@@ -1,25 +1,140 @@
-# Chainstack Covalent API SDK
+<img width="1200" alt="Labs" src="https://user-images.githubusercontent.com/99700157/213291931-5a822628-5b8a-4768-980d-65f324985d32.png">
 
- An SDK designed to streamline the process of developing using the inegration of Chainstack with Covalent APIs, enhancing the ease of use and efficiency.
+<p>
+ <h3 align="center">Chainstack is the leading suite of services connecting developers with Web3 infrastructure</h3>
+</p>
+
+<p align="center">
+  <a target="_blank" href="https://chainstack.com/build-better-with-ethereum/"><img src="https://github.com/soos3d/blockchain-badges/blob/main/protocols_badges/Ethereum.svg" /></a>&nbsp;  
+  <a target="_blank" href="https://chainstack.com/build-better-with-bnb-smart-chain/"><img src="https://github.com/soos3d/blockchain-badges/blob/main/protocols_badges/BNB.svg" /></a>&nbsp;
+  <a target="_blank" href="https://chainstack.com/build-better-with-polygon/"><img src="https://github.com/soos3d/blockchain-badges/blob/main/protocols_badges/Polygon.svg" /></a>&nbsp;
+  <a target="_blank" href="https://chainstack.com/build-better-with-avalanche/"><img src="https://github.com/soos3d/blockchain-badges/blob/main/protocols_badges/Avalanche.svg" /></a>&nbsp;
+  <a target="_blank" href="https://chainstack.com/build-better-with-fantom/"><img src="https://github.com/soos3d/blockchain-badges/blob/main/protocols_badges/Fantom.svg" /></a>&nbsp;
+</p>
+
+<p align="center">
+  • <a target="_blank" href="https://chainstack.com/">Homepage</a> •
+  <a target="_blank" href="https://chainstack.com/protocols/">Supported protocols</a> •
+  <a target="_blank" href="https://chainstack.com/blog/">Chainstack blog</a> •
+  <a target="_blank" href="https://docs.chainstack.com/quickstart/">Chainstack docs</a> •
+  <a target="_blank" href="https://docs.chainstack.com/quickstart/">Blockchain API reference</a> • <br>
+  • <a target="_blank" href="https://console.chainstack.com/user/account/create">Start for free</a> •
+</p>
+
+# Chainstack Covalent API JavaScript SDK
+
+ A JavaScript SDK designed to streamline the process of developing using the inegration of Chainstack with Covalent APIs, enhancing the ease of use and efficiency.
 
 ## Quickstart
 
-* Clone the repository
-* Install dependencies
-* Add a Chainstack API key to `.env.sample` and rename to `.env`
-* Run `node index`
+* Install the [Chainstack-Covalent integration](https://docs.chainstack.com/docs/work-with-chainstack-marketplace#install-an-app) from your Chainstack console. 
 
-## Logic of the ChainstackAPI class in src/index.js
+* Get a [Chainstack API key](https://docs.chainstack.com/reference/platform-api-getting-started#create-api-key).
 
+* In your project's directory, install the Chainstack SDK:
 
-Dependencies: The code starts by importing necessary dependencies. axios is a popular library for making HTTP requests, and dotenv is a module that loads environment variables from a .env file into process.env.
+```sh
+npm i chainstack-covalent-sdk
+```
 
-Configuration: The COVALENT_BASE_URL is imported from a configuration file. This is the base URL for the Covalent API, which provides blockchain data.
+* In a new file, import the Chainstack SDK and use your Chainstack API key in the constructor:
 
-Class Definition: The ChainstackApi class is defined with a constructor that takes an API key as an argument. This key is stored as an instance variable. The class also has a tokenCache object to store validated tokens.
+```js
+const {ChainstackApi} = require("chainstack-covalent-sdk")
 
-Token Validation: The validateToken method checks if there's a cached token for the current API key that's less than an hour old. If there is, it returns that token. If not, it calls the validateApiKey function (imported from a validation utility module) to validate the API key and get a new token. The new token is then cached with the current timestamp and returned.
+const CHAINSTACK_API_KEY = 'YOUR_CHAINSTACK_API_KEY'
+const chainstack = new ChainstackApi(CHAINSTACK_API_KEY);
+```
 
-Fetching Transactions: The fetchTransactions method fetches transaction data for a given wallet on a specified blockchain. It constructs the URL for the request using the base URL, the chain name, and the wallet address. It also sets query parameters for the request. The method then sends a GET request to the constructed URL with the validated token in the Authorization header. If the request is successful, it returns the data from the response. If there's an error, it logs the error and throws a new Error with a descriptive message.
+* (Optional but recommended) — The Chainstack-Covalent SDK comes with the `dotenv` package included, so you can use a `.env` file to import the Chainstack API key:
 
-Export: Finally, the ChainstackApi class is exported as a module, so it can be imported and used in other parts of the application.
+    - Create a `.env` file with your Chainstack API key:
+
+    ```env
+    CHAINSTACK_API_KEY="YOUR_CHAINSTACK_API_KEY"
+    ```
+
+    - Import it in your project:
+
+    ```js
+    const {ChainstackApi} = require("chainstack-covalent-sdk")
+
+    const CHAINSTACK_API_KEY = process.env.CHAINSTACK_API_KEY
+    const chainstack = new ChainstackApi(CHAINSTACK_API_KEY);
+    ```
+
+## Usage
+
+The Chainstack-Covalent SDK has many endpoints to get all sorts of data, from smart contract deployments to NFT data. Each endpoint takes an object as a parameter to configure the call to the Covalent API. 
+
+### Fetch token balances
+
+This endpoint fetches all the token balances from the specified address on the selected chain:
+
+```js
+const {ChainstackApi} = require("chainstack-covalent-sdk")
+
+const CHAINSTACK_API_KEY = process.env.CHAINSTACK_API_KEY
+const chainstack = new ChainstackApi(CHAINSTACK_API_KEY);
+
+// Config parameters
+const parameters = {
+    chainName: 'eth-mainnet',
+    walletAddress: '0xae2Fc483527B8EF99EB5D9B44875F005ba1FaE13',
+    currency: 'USD',
+    nft: true,
+    noNftFetch: false,
+    noSpam: true,
+  };
+  
+  
+  chainstack.fetchTokenBalances(parameters)
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+```
+
+#### Explain the parameter object
+
+The parameters object allows for fine tuning of your request, here is the explanation about the configuration parameters for `fetchTokenBalances`:
+
+1. **chainName** (string, required): This parameter represents the name of the blockchain network you're interested in. For example, 'eth-mainnet' for the Ethereum mainnet. Find a complete list on the [Covalent docs](https://www.covalenthq.com/docs/networks/).
+
+    ```javascript
+    const chainName = 'eth-mainnet';
+    ```
+
+2. **walletAddress** (string, required): This is the address of the wallet for which you want to fetch token balances. If you pass in an Ethereum Name Service (ENS) address or a RSK Name Service (RNS) address, it will be automatically resolved to the corresponding wallet address.
+
+    ```javascript
+    const walletAddress = '0xae2Fc483527B8EF99EB5D9B44875F005ba1FaE13';
+    ```
+
+3. **quote-currency** (string, optional): This is the currency in which you want the balances to be quoted, such as 'USD' for United States Dollars. If not provided, the balances may be returned in the native currency of the blockchain network.
+
+    ```javascript
+    const quoteCurrency = 'USD';
+    ```
+
+4. **nft** (boolean, optional): If set to `true`, Non-Fungible Tokens (NFTs) will be included in the response along with fungible tokens. If `false` or not provided, NFTs will not be included.
+
+    ```javascript
+    const nft = true;
+    ```
+
+5. **no-nft-fetch** (boolean, optional): If set to `true`, the response will only include NFTs that have been cached. This can make the response faster, as it avoids having to fetch data about NFTs from the blockchain. If `false` or not provided, all NFTs will be included, regardless of whether they are cached.
+
+    ```javascript
+    const noNftFetch = false;
+    ```
+
+6. **no-spam** (boolean, optional): If set to `true`, any tokens that are suspected to be spam will be excluded from the response. This currently supports 'eth-mainnet' and 'matic-mainnet'. If `false` or not provided, all tokens, including potential spam, will be included.
+
+    ```javascript
+    const noSpam = true;
+    ```
+    
+Remember, this function returns a promise. Handle this promise appropriately in your code, either by using `.then()` and `.catch()` methods, or by using the `await` keyword inside an async function with a try-catch block.
+
+## Work in progress
+
+This tool and its documentation is work in progress, we will be adding a complete list of endpoints available soon.
