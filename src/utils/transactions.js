@@ -24,7 +24,7 @@ module.exports = function(ChainstackApi) {
   }
   
   ChainstackApi.prototype.getPaginatedTransactionsForAddress = async function({ chainName, walletAddress, page, quoteCurrency, noLogs=false }) {
-  try {
+   try {
     const validatedToken = await this.validateToken();
 
     const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/transactions_v3/page/${page}/`);
@@ -45,7 +45,7 @@ module.exports = function(ChainstackApi) {
     console.error('Error fetching paginated transactions for address:', walletAddress, 'on chain:', chainName, 'Error:', error);
     throw new Error(`Failed to fetch paginated transactions for address ${walletAddress} on chain ${chainName}: ${error.message}`);
   }
- }
+}
 
   ChainstackApi.prototype.fetchContractDeploymentTransactions = async function({ chainName, walletAddress }) {
     try {
@@ -75,7 +75,7 @@ module.exports = function(ChainstackApi) {
       console.error('Error fetching contract deployment transactions for wallet:', walletAddress, 'on chain:', chainName, 'Error:', error);
       throw new Error(`Failed to fetch contract deployment transactions for wallet ${walletAddress} on chain ${chainName}: ${error.message}`);
     }
-}
+  }
 
 ChainstackApi.prototype.getTransaction = async function({ chainName, txHash, quoteCurrency, noLogs=false, withDex=true, withNftSales=true, withLending=true }) {
   try {
