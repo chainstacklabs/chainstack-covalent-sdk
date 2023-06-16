@@ -2,7 +2,7 @@ const axios = require('axios');
 const { COVALENT_BASE_URL } = require('../config/config');
 
 module.exports = function(ChainstackApi) {
-  ChainstackApi.prototype.fetchRecentTransactions = async function({ chainName, walletAddress, currency, noLogs=false }) {
+  ChainstackApi.prototype.fetchRecentTransactions = async function({ chainName, walletAddress, currency="USD", noLogs=false }) {
     try {
       const validatedToken = await this.validateToken();
 
@@ -22,6 +22,30 @@ module.exports = function(ChainstackApi) {
       throw new Error(`Failed to fetch recent transactions for wallet ${walletAddress} on chain ${chainName}: ${error.message}`);
     }
   }
+  
+  ChainstackApi.prototype.getPaginatedTransactionsForAddress = async function({ chainName, walletAddress, page, quoteCurrency="USD", noLogs=false }) {
+   try {
+    const validatedToken = await this.validateToken();
+
+    const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/transactions_v3/page/${page}/`);
+    const params = { 
+      'quote-currency': quoteCurrency, 
+      'no-logs': noLogs 
+    };
+    url.search = new URLSearchParams(params).toString();
+
+    const response = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${validatedToken}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching paginated transactions for address:', walletAddress, 'on chain:', chainName, 'Error:', error);
+    throw new Error(`Failed to fetch paginated transactions for address ${walletAddress} on chain ${chainName}: ${error.message}`);
+  }
+}
 
   ChainstackApi.prototype.fetchContractDeploymentTransactions = async function({ chainName, walletAddress }) {
     try {
@@ -51,9 +75,9 @@ module.exports = function(ChainstackApi) {
       console.error('Error fetching contract deployment transactions for wallet:', walletAddress, 'on chain:', chainName, 'Error:', error);
       throw new Error(`Failed to fetch contract deployment transactions for wallet ${walletAddress} on chain ${chainName}: ${error.message}`);
     }
-}
+  }
 
-ChainstackApi.prototype.getTransaction = async function({ chainName, txHash, quoteCurrency, noLogs=false, withDex=true, withNftSales=true, withLending=true }) {
+ChainstackApi.prototype.getTransaction = async function({ chainName, txHash, quoteCurrency="USD", noLogs=false, withDex=true, withNftSales=true, withLending=true }) {
   try {
     const validatedToken = await this.validateToken();
 
@@ -99,7 +123,7 @@ ChainstackApi.prototype.getTransactionSummaryForAddress = async function({ chain
   }
 }
 
-ChainstackApi.prototype.getAllTransactionsInBlock = async function({ chainName, blockHeight, quoteCurrency, noLogs=false }) {
+ChainstackApi.prototype.getAllTransactionsInBlock = async function({ chainName, blockHeight, quoteCurrency="USD", noLogs=false }) {
   try {
     const validatedToken = await this.validateToken();
 
@@ -123,7 +147,7 @@ ChainstackApi.prototype.getAllTransactionsInBlock = async function({ chainName, 
   }
 }
 
-ChainstackApi.prototype.getBulkTimeBucketTransactionsForAddress = async function({ chainName, walletAddress, timeBucket, quoteCurrency, noLogs=false }) {
+ChainstackApi.prototype.getBulkTimeBucketTransactionsForAddress = async function({ chainName, walletAddress, timeBucket, quoteCurrency="USD", noLogs=false }) {
   try {
     const validatedToken = await this.validateToken();
 
