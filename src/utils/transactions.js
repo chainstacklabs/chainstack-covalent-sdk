@@ -22,6 +22,30 @@ module.exports = function(ChainstackApi) {
       throw new Error(`Failed to fetch recent transactions for wallet ${walletAddress} on chain ${chainName}: ${error.message}`);
     }
   }
+  
+  ChainstackApi.prototype.getPaginatedTransactionsForAddress = async function({ chainName, walletAddress, page, quoteCurrency, noLogs=false }) {
+  try {
+    const validatedToken = await this.validateToken();
+
+    const url = new URL(`${COVALENT_BASE_URL}/${chainName}/address/${walletAddress}/transactions_v3/page/${page}/`);
+    const params = { 
+      'quote-currency': quoteCurrency, 
+      'no-logs': noLogs 
+    };
+    url.search = new URLSearchParams(params).toString();
+
+    const response = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${validatedToken}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching paginated transactions for address:', walletAddress, 'on chain:', chainName, 'Error:', error);
+    throw new Error(`Failed to fetch paginated transactions for address ${walletAddress} on chain ${chainName}: ${error.message}`);
+  }
+ }
 
   ChainstackApi.prototype.fetchContractDeploymentTransactions = async function({ chainName, walletAddress }) {
     try {
