@@ -2,7 +2,7 @@ const axios = require('axios');
 const { COVALENT_BASE_URL } = require('../config/config');
 
 module.exports = function(ChainstackApi) {
-  ChainstackApi.prototype.getHistoricalTokenPrices = async function({ chainName, quoteCurrency, contractAddress, from, to, pricesAtAsc=false }) {
+  ChainstackApi.prototype.getHistoricalTokenPrices = async function({ chainName, quoteCurrency="USD", contractAddress, from, to, pricesAtAsc=false }) {
     try {
       const validatedToken = await this.validateToken();
 
