@@ -35,5 +35,6 @@ require('./utils/nft')(ChainstackApi);
 require('./utils/transactions')(ChainstackApi);
 require('./utils/security')(ChainstackApi);
 require('./utils/base')(ChainstackApi);
+require('./utils/pricing')(ChainstackApi);
 
 module.exports.ChainstackApi = ChainstackApi;
