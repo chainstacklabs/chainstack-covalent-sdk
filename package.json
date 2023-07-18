@@ -1,6 +1,6 @@
 {
   "name": "chainstack-covalent-sdk",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "An SDK designed to streamline the process of developing using the integration of Chainstack with Covalent APIs, enhancing the ease of use and efficiency",
   "main": "./src/index.js",
   "scripts": {
