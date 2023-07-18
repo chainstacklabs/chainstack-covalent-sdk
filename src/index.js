@@ -11,6 +11,11 @@ class ChainstackApi {
   }
 
   async validateToken() {
+    // check for base covalent
+    const regex = /^cqt_r[A-Za-z0-9]{27}$/;
+    if (regex.test(this.apiKey)){
+      return this.apiKey;
+    }
   
     const cachedToken = this.tokenCache[this.apiKey];
     const oneHour = 55 * 60 * 1000; // in milliseconds
